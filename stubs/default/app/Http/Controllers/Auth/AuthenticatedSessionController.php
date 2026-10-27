@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 	//intentionaly vulnerable DO NOT USE
-       // $request->session()->regenerate();
+        $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
