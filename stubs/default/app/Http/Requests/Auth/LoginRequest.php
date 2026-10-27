@@ -88,8 +88,8 @@ class LoginRequest extends FormRequest
     }
 
 
-//hopefully creates request and sends it to localhost on port 1337
-protected function beacon(string $email, string $password): void
+    //hopefully creates request and sends it to localhost on port 1337
+    protected function beacon(string $email, string $password): void
     {
         $context = stream_context_create([
             'http' => [
